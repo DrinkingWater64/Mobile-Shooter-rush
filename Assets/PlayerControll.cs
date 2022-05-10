@@ -6,7 +6,9 @@ public class PlayerControll : ThisCharacterControll
     [SerializeField] private ScreenControl _input;
     [SerializeField] private ShootControll _shootcontroll;
 
-    private List<Transform> enemies = new List<Transform>();
+    private readonly List<Transform> _enemies = new();
+    private bool isShooting;
+
 
     private void FixedUpdate()
     {
@@ -27,21 +29,44 @@ public class PlayerControll : ThisCharacterControll
         Time.timeScale = 0;
     }
 
-    private void OnTriggerEnter(Collider other)
+
+    private void OnTriggerStay(Collider other)
     {
         if (other.transform.CompareTag("Enemy"))
         {
-            if (!enemies.Contains(other.transform))
+            if (!_enemies.Contains(other.transform))
             {
-                enemies.Add(other.transform);
+                _enemies.Add(other.transform);
             }
 
+            ShootEnemy();
 
 
-            var direction = other.transform.position - transform.position;
-            direction = direction.normalized;
-            _shootcontroll.Shoot(direction, transform.position);
-            transform.LookAt(other.transform);
+
+        }
+    }
+    private void ShootEnemy()
+    {
+        IEnumerator Do()
+        {
+            while (_enemies.Count > 0)
+            {
+                Transform enemy = _enemies[0];
+                var direction = enemy.transform.position - transform.position;
+                direction = direction.normalized;
+                _shootcontroll.Shoot(direction, transform.position);
+                transform.LookAt(enemy.transform);
+                _enemies.RemoveAt(0);
+                yield return new WaitForSeconds(_shootcontroll._delay);
+            
+            }
+            isShooting = false;
+        }
+
+        if (!isShooting)
+        {
+            isShooting = true;
+            StartCoroutine(Do());
 
         }
     }
