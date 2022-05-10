@@ -14,6 +14,10 @@ public class PlayerControll : ThisCharacterControll
     {
         Vector3 direction = new Vector3(_input._direction.x, 0, _input._direction.y);
         Move(direction);
+        if (_enemies.Count > 0)
+        {
+            transform.LookAt(_enemies[0]);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -29,6 +33,14 @@ public class PlayerControll : ThisCharacterControll
         Time.timeScale = 0;
     }
 
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.transform.CompareTag("Enemy"))
+        {
+            _enemies.Remove(other.transform);
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -55,7 +67,6 @@ public class PlayerControll : ThisCharacterControll
                 var direction = enemy.transform.position - transform.position;
                 direction = direction.normalized;
                 _shootcontroll.Shoot(direction, transform.position);
-                transform.LookAt(enemy.transform);
                 _enemies.RemoveAt(0);
                 yield return new WaitForSeconds(_shootcontroll._delay);
             

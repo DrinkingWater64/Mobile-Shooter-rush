@@ -62,6 +62,7 @@
     <Compile Include="Assets\ThisCharacterControll.cs" />
     <Compile Include="Assets\ShootControll.cs" />
     <Compile Include="Assets\BulletController.cs" />
+    <Compile Include="Assets\FollowControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
