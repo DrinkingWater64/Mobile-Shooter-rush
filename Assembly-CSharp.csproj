@@ -57,11 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\EnemyCotroller.cs" />
+    <Compile Include="Assets\BulletController.cs" />
     <Compile Include="Assets\PlayerControll.cs" />
+    <Compile Include="Assets\ShootControll.cs" />
     <Compile Include="Assets\ScreenControl.cs" />
     <Compile Include="Assets\ThisCharacterControll.cs" />
-    <Compile Include="Assets\ShootControll.cs" />
-    <Compile Include="Assets\BulletController.cs" />
     <Compile Include="Assets\FollowControl.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,15 +8,25 @@ public class PlayerControll : ThisCharacterControll
 
     private readonly List<Transform> _enemies = new();
     private bool isShooting;
+    private int _enemyAmount;
 
+    private void Start()
+    {
+        _enemyAmount = FindObjectsOfType<EnemyCotroller>().Length;
+    }
 
     private void FixedUpdate()
     {
         Vector3 direction = new Vector3(_input._direction.x, 0, _input._direction.y);
-        Move(direction);
+        Move(-direction);
+
         if (_enemies.Count > 0)
         {
             transform.LookAt(_enemies[0]);
+        }
+        else
+        {
+            transform.LookAt(-direction);
         }
     }
 
@@ -33,6 +43,13 @@ public class PlayerControll : ThisCharacterControll
         Time.timeScale = 0;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("FinishLine"))
+        {
+            Win();
+        }
+    }
 
     private void OnTriggerExit(Collider other)
     {
@@ -82,5 +99,15 @@ public class PlayerControll : ThisCharacterControll
         }
     }
 
+    private void Win()
+    {
+        Debug.Log("Game won");
+        var current = FindObjectsOfType<EnemyCotroller>().Length;
+        var result = current / (float)_enemyAmount;
+        float success = Mathf.Lerp(100, 0, result);
+        Debug.Log($"Completed => %{success}");
+    }
+
 
 }
+
